@@ -21,15 +21,9 @@ module signed_add_with_saturation
   // Implement addition with saturation,
   // i.e. if the result does not fit
   // the maximum or minimum values should be used
-  wire [3:0] sumt;
-    assign sumt = a + b;
-    always_comb
-  	if ((a[3] & b[3] & ~sumt[3]))
-  		assign sum = a > b ? a : b;
-  	else if ((~a[3] & ~b[3] & sumt[3]))
-  		assign sum = a > b ? b : a;
-  	else
-  		assign sum = sumt;
+  reg [3:0] sumt;
+  assign sumt = a + b;
+  assign sum = (a[3] & b[3] & ~sumt[3]) ? -8 : (~a[3] & ~b[3] & sumt[3]) ? 7 : a + b;
 
 endmodule
 
