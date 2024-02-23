@@ -45,7 +45,25 @@ module signed_or_unsigned_mul
 
   // Implement a module that generates either signed or unsigned result
   // of the multiplication as requested by sign bit.
-
+  reg signed [n:0] a_signed, b_signed;
+  reg signed [2*n:0] mult_signed;
+  
+  reg [n - 1:0] a_unsigned, b_unsigned;	// == unsigned
+  reg [2 * n - 1:0] mult_unsigned, rest;	//reg for always block (idk how to without it)
+  
+  always @* begin
+    if (sign) begin
+      // Interpret a and b as signed
+      a_signed = {a[n-1], a};
+      b_signed = {b[n-1], b};
+      mult_signed = a_signed * b_signed;
+      rest = mult_signed[2 * n - 1:0];
+    end else begin
+      mult_unsigned = a * b;
+      rest = mult_unsigned;
+    end
+  end
+  assign res = rest;
 
 endmodule
 
